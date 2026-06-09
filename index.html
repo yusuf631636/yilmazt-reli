@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Türeli Soy Ağacı | Açılış Dualı & Manevi Index</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #1e2a1a 0%, #0a1005 100%);
+            font-family: 'Segoe UI', 'Palatino', 'Georgia', serif;
+            color: #faf3db;
+            padding: 20px;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* AÇILIŞ DUA PANELİ - muhteşem başlangıç */
+        .dua-giris {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1.2s;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .dua-kutu {
+            background: #2c2818;
+            border: 3px solid #e9c56b;
+            border-radius: 64px;
+            padding: 40px 30px;
+            max-width: 550px;
+            text-align: center;
+            box-shadow: 0 0 80px rgba(212, 175, 55, 0.6);
+            animation: duaPulse 2s infinite;
+        }
+
+        @keyframes duaPulse {
+            0% { box-shadow: 0 0 10px gold; }
+            100% { box-shadow: 0 0 40px #ffbf00; }
+        }
+
+        .dua-kutu h2 {
+            font-size: 2rem;
+            color: #ffdfa5;
+            border-bottom: 2px solid #c2a144;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .dua-metin {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin: 20px 0;
+            font-style: italic;
+            color: #ffefc0;
+        }
+
+        .dua-buton {
+            background: #b3872e;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 60px;
+            cursor: pointer;
+            color: #1f2e0a;
+            transition: 0.2s;
+            margin-top: 15px;
+        }
+
+        .dua-buton:hover {
+            background: #ffcd70;
+            transform: scale(1.03);
+            box-shadow: 0 0 20px gold;
+        }
+
+        /* ana içerik */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 60px;
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid #e6bc6f;
+        }
+
+        .header h1 {
+            font-size: 2.6rem;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #fbe6a0, #c99e36);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .tree {
+            display: flex;
+            flex-direction: column;
+            gap: 45px;
+        }
+
+        .generation {
+            background: rgba(20, 25, 10, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 48px;
+            padding: 20px;
+            border: 1px solid #cbaa54;
+            transition: 0.3s;
+        }
+
+        .gen-title {
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: bold;
+            border-bottom: 2px dashed #e6b450;
+            display: inline-block;
+            width: auto;
+            margin: 0 auto 20px;
+            padding: 0 20px 8px;
+            letter-spacing: 2px;
+        }
+
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        /* KARTLAR - tıklanabilir dua kartı */
+        .sacred-card {
+            width: 270px;
+            background: linear-gradient(145deg, #302a19, #1d1a0e);
+            border-radius: 36px;
+            border: 1px solid #dbb45c;
+            padding: 18px 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.4);
+        }
+
+        .sacred-card:hover {
+            transform: translateY(-8px);
+            border-color: #ffdd99;
+            box-shadow: 0 0 25px rgba(220, 180, 70, 0.6);
+            background: #3f3822;
+        }
+
+        .name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffedb2;
+        }
+
+        .relation {
+            background: #5e4c2a;
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            margin: 8px 0;
+        }
+
+        .dates, .place {
+            font-size: 0.7rem;
+            color: #dccf9a;
+        }
+
+        .btn-dua {
+            background: none;
+            border: 1px solid #e5bc70;
+            color: #f3ddab;
+            padding: 5px 15px;
+            border-radius: 40px;
+            margin-top: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-dua:hover {
+            background: #dfb356;
+            color: #1b2a0a;
+            font-weight: bold;
+        }
+
+        /* modal dua */
+        .modal-dua {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 380px;
+            background: #1e2612;
+            border: 3px solid #f3c26b;
+            border-radius: 56px;
+            padding: 25px;
+            z-index: 2000;
+            box-shadow: 0 0 60px black;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .modal-dua.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1999;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.2s;
+        }
+
+        .overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            margin-top: 50px;
+            color: #ab9a60;
+            border-top: 1px solid #5f512a;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- AÇILIŞ DUALARI EKRANI -->
+<div id="duaEkrani" class="dua-giris">
+    <div class="dua-kutu">
+        <h2>🌾 BİSMİLLAHİRRAHMANİRRAHİM 🌾</h2>
+        <div class="dua-metin">
+            “Ey bu kutlu soyun yüce ataları,<br>
+            Sizler ki toprak oldunuz, rahmet oldunuz.<br>
+            Şimdi Yılmaz Türeli ve tüm nesil sizi anıyor.<br><br>
+            🕊️ El-Fatiha 🕊️<br>
+            Ve üç İhlas-ı Şerif ruhunuza hediye olsun.<br>
+            🌹 Ruhlarınız şad, makamınız cennet olsun.”
+        </div>
+        <button id="girisiKapat" class="dua-buton">✨ SOY AĞACINA GİR ✨</button>
+    </div>
+</div>
+
+<div class="header">
+    <h1>🌳 YILMAZ TÜRELİ 🌳</h1>
+    <p>Muş / Çiçekli Köyü · 7 Kuşak Dualı Soy Ağacı · Her Ataya Fatiha</p>
+</div>
+
+<div class="tree" id="soyAgaci"></div>
+
+<footer>💫 Her bir karta tıklayın — o atanın ruhuna özel dua ve hikmet sözü gelir.<br>📖 Molla Kutbettin Türeli’nin duası ayrıca mübarektir. Açılış duaları kabul olsun.</footer>
+
+<div class="overlay" id="overlay"></div>
+<div class="modal-dua" id="duaModal">
+    <h3 id="modalIsim">🌸</h3>
+    <div id="modalDuaMetni" style="margin: 20px 0; font-style: italic; line-height:1.5;"></div>
+    <button id="modalKapat" class="btn-dua" style="background:#b48c30;">🌙 Amin, Kapat</button>
+</div>
+
+<script>
+    // TAMAMI SİZİN TABLONUZLA BİREBİR 22 KİŞİLİK VERİ
+    const bireyler = [
+        { sira:1, cins:"K", yakinlik:"Annesinin Babasının Babasının Annesi", ad:"HAZAL", soyad:"YILDIRIM", babaAd:"SİLO", anaAd:"GÜLİ", dogumYerTarih:"MUŞ 01/07/1864", il:"Muş/Merkez/Çiçekli", kutuphane:"40-12-5", medeni:"Bekâr", durum:"Ölüm", ekBilgi:"Soyun kadim annesi, sabır ve bereket timsali." },
+        { sira:2, cins:"E", yakinlik:"Babasının Babasının Babası", ad:"SÜLEYMAN", soyad:"TÜRELİ", babaAd:"HÜSEYİN", anaAd:"GÜLLÜ", dogumYerTarih:"MUŞ 01/07/1884", il:"Muş/Merkez/Çiçekli", kutuphane:"40-25-1", medeni:"Evli", durum:"Ölüm 01/03/1942", ekBilgi:"Aşiretin bilge reisi." },
+        { sira:3, cins:"E", yakinlik:"Annesinin Annesinin Babası", ad:"TAHİR", soyad:"SAVAŞ", babaAd:"HASAN", anaAd:"EMİNE", dogumYerTarih:"MUŞ 01/07/1894", il:"Muş/Merkez/Çiçekli", kutuphane:"40-20-1", medeni:"Evli", durum:"Ölüm 01/05/1939", ekBilgi:"Tahir Dede, helal lokma duasıyla ünlü." },
+        { sira:4, cins:"K", yakinlik:"Babasının Babasının Annesi", ad:"GEVRİ", soyad:"TÜRELİ", babaAd:"HÜSEYİN", anaAd:"HATİ", dogumYerTarih:"MUŞ 01/07/1894", il:"Muş/Merkez/Çiçekli", kutuphane:"40-25-2", medeni:"Dul", durum:"Ölüm 15/03/1986", ekBilgi:"Dul bir kadın olarak köyüne ışık oldu." },
+        { sira:5, cins:"E", yakinlik:"Annesinin Babasının Babası", ad:"ARİF", soyad:"YILDIRIM", babaAd:"İBRAHİM", anaAd:"HAZAL", dogumYerTarih:"MUŞ 01/07/1896", il:"Muş/Merkez/Çiçekli", kutuphane:"40-12-6", medeni:"Evli", durum:"Ölüm 03/02/1969", ekBilgi:"Arif dede, toprakla konuşurdu." },
+        { sira:6, cins:"E", yakinlik:"Babasının Annesinin Babası", ad:"HAMİT", soyad:"TOKSUN", babaAd:"CUMA", anaAd:"BERKO", dogumYerTarih:"MUŞ 01/07/1896", il:"Muş/Merkez/Sürügüden", kutuphane:"126-2-1", medeni:"Evli", durum:"Ölüm", ekBilgi:"Sürügüden'in cesur koruyucusu." },
+        { sira:7, cins:"K", yakinlik:"Annesinin Babasının Annesi", ad:"HAZAL", soyad:"YILDIRIM", babaAd:"MUSTAFA", anaAd:"SARATE", dogumYerTarih:"MUŞ 01/07/1898", il:"Muş/Merkez/Çiçekli", kutuphane:"40-12-7", medeni:"Evli", durum:"Ölüm 22/04/1931", ekBilgi:"Genç yaşta vefat etti, dualarla anılır." },
+        { sira:8, cins:"K", yakinlik:"Annesinin Annesinin Annesi", ad:"SENEM", soyad:"SAVAŞ", babaAd:"HÜSEYİN", anaAd:"AŞİ", dogumYerTarih:"MUŞ 01/07/1899", il:"Muş/Merkez/Çiçekli", kutuphane:"40-20-2", medeni:"Dul", durum:"Ölüm 01/01/1946", ekBilgi:"Hayırsever ninelerin hocası." },
+        { sira:9, cins:"K", yakinlik:"Babasının Annesinin Annesi", ad:"DİLŞAH", soyad:"TOKSUN", babaAd:"ÇACO", anaAd:"HANİ", dogumYerTarih:"MUŞ 01/07/1901", il:"Muş/Merkez/Sürügüden", kutuphane:"126-2-2", medeni:"Dul", durum:"Ölümün Tespiti", ekBilgi:"Anlatılmamış destanların kadını." },
+        { sira:10, cins:"E", yakinlik:"Babasının Babası", ad:"AHMET", soyad:"TÜRELİ", babaAd:"SÜLEYMAN", anaAd:"GEVRİ", dogumYerTarih:"MUŞ 01/07/1918", il:"Muş/Merkez/Çiçekli", kutuphane:"40-25-3", medeni:"Evli", durum:"Ölüm 07/04/1987", ekBilgi:"Ahmet Dede, hoşgörü ve adalet timsali." },
+        { sira:11, cins:"K", yakinlik:"Babasının Annesi", ad:"FERZO", soyad:"TÜRELİ", babaAd:"HAMİT", anaAd:"DİLŞAH", dogumYerTarih:"MUŞ 01/07/1920", il:"Muş/Merkez/Çiçekli", kutuphane:"40-25-8", medeni:"Dul", durum:"Ölüm 31/08/1996", ekBilgi:"Elleri hiç boş durmazdı, herkes onun duasını isterdi." },
+        { sira:12, cins:"E", yakinlik:"Annesinin Babası", ad:"ŞEMSEDDİN", soyad:"YILDIRIM", babaAd:"ARİF", anaAd:"HAZAL", dogumYerTarih:"MUŞ 01/07/1922", il:"Muş/Merkez/Çiçekli", kutuphane:"40-12-8", medeni:"Evli", durum:"Ölüm 04/05/1997", ekBilgi:"Şemseddin Hoca, Kuran'ı güzel okurdu." },
+        { sira:13, cins:"K", yakinlik:"Annesinin Annesi", ad:"BEDİA", soyad:"YILDIRIM", babaAd:"TAHİR", anaAd:"SENEM", dogumYerTarih:"MUŞ 01/07/1923", il:"Muş/Merkez/Çiçekli", kutuphane:"40-12-22", medeni:"Dul", durum:"Ölüm 03/09/2013", ekBilgi:"Bed Ana, yorgan diker, dualar fısıldardı." },
+        { sira:14, cins:"E", yakinlik:"Babası", ad:"KUTBETTİN", soyad:"TÜRELİ", babaAd:"AHMET", anaAd:"FERZO", dogumYerTarih:"MUŞ 01/06/1944", il:"Muş/Merkez/Çiçekli", kutuphane:"40-25-11", medeni:"Evli", durum:"Ölüm 20/12/2020", ekBilgi:"MOLLA KUTBETTİN – Köyün hocası, Kur'an'a adanmış ömür." },
+        { sira:15, cins:"K", yakinlik:"Annesi", ad:"HATUN", soyad:"TÜRELİ", babaAd:"ŞEMSEDDİN", anaAd:"BEDİA", dogumYerTarih:"MUŞ 01/02/1956", il:"Muş/Merkez/Çiçekli", kutuphane:"40-25-24", medeni:"Dul", durum:"Sağ", ekBilgi:"Anamız Hatun, sabır ve sevgi ocağı." },
+        { sira:16, cins:"E", yakinlik:"Kendisi", ad:"YILMAZ", soyad:"TÜRELİ", babaAd:"KUTBETTİN", anaAd:"HATUN", dogumYerTarih:"MUŞ 01/01/1980", il:"Muş/Merkez/Çiçekli", kutuphane:"40-25-27", medeni:"Evli", durum:"Sağ", ekBilgi:"Bu kutlu ağacın sahibi, nesilleri birleştiren." },
+        { sira:17, cins:"K", yakinlik:"Kızı", ad:"RUKİYE", soyad:"TÜRELİ", babaAd:"YILMAZ", anaAd:"SUNA", dogumYerTarih:"YILDIRIM 27/07/2003", il:"Muş/Merkez/Çiçekli", kutuphane:"40-25-144", medeni:"Bekâr", durum:"Sağ", ekBilgi:"Rukiye'nin gülüşü köyün neşesi." },
+        { sira:18, cins:"E", yakinlik:"Oğlu", ad:"SİNAN", soyad:"TÜRELİ", babaAd:"YILMAZ", anaAd:"SUNA", dogumYerTarih:"01/06/2005", il:"Muş/Merkez/Çiçekli", kutuphane:"40-25-145", medeni:"Bekâr", durum:"Sağ", ekBilgi:"Sinan, dedesi Kutbettin'in izinde." },
+        { sira:19, cins:"E", yakinlik:"Oğlu", ad:"SİDAR", soyad:"TÜRELİ", babaAd:"YILMAZ", anaAd:"SUNA", dogumYerTarih:"01/08/2009", il:"Muş/Merkez/Çiçekli", kutuphane:"40-25-157", medeni:"Bekâr", durum:"Sağ", ekBilgi:"Sidar'ın kalemi güçlüdür." },
+        { sira:20, cins:"K", yakinlik:"Kızı", ad:"ÜMMÜ GÜLSÜM", soyad:"TÜRELİ", babaAd:"YILMAZ", anaAd:"SUNA", dogumYerTarih:"23/12/2010", il:"Muş/Merkez/Çiçekli", kutuphane:"40-25-170", medeni:"Bekâr", durum:"Ölüm 16/02/2011", ekBilgi:"Mevlana'nın 'Bir kez göründü, gitti' dediği melek." },
+        { sira:21, cins:"E", yakinlik:"Oğlu", ad:"AHMET BİLAL", soyad:"TÜRELİ", babaAd:"YILMAZ", anaAd:"SUNA", dogumYerTarih:"23/01/2016", il:"Muş/Merkez/Çiçekli", kutuphane:"40-25-208", medeni:"Bekâr", durum:"Sağ", ekBilgi:"Bilal, atalarının adını taşır." },
+        { sira:22, cins:"E", yakinlik:"Oğlu", ad:"ALİ ASAF", soyad:"TÜRELİ", babaAd:"YILMAZ", anaAd:"SUNA", dogumYerTarih:"04/05/2022", il:"Muş/Merkez/Çiçekli", kutuphane:"40-25-255", medeni:"Bekâr", durum:"Sağ", ekBilgi:"Soyun umudu, en genç fidan." }
+    ];
+
+    // HER BİREY İÇİN DUA VE SÖZLER (detaylandırılmış)
+    const duaSoz = {
+        1: "🌹 Hazal Yıldırım: Kadim ana, senin için El-Fatiha. Ruhun nurlansın, mekanın cennet bahçeleri olsun. 🌹",
+        2: "🕋 Süleyman Türeli: Soyun bilge reisi. Kabrin nur, makamın âli olsun. Tüm ecdada rahmet okuruz.",
+        3: "📿 Tahir Savaş: Helal lokma duasıyla bilinirdin. Allah razı olsun. El-Fatiha.",
+        4: "🌙 Gevri Türeli: Dul bir kadın olarak köyüne ışık oldun. Dualar seninle, nur içinde yat.",
+        5: "🍂 Arif Yıldırım: Toprakla konuşan, ekmeği bölen dede. Toprağın hafif olsun.",
+        6: "⛰️ Hamit Toksun: Sürügüden'in aslanı. Komşuların seni rahmetle anıyor.",
+        7: "🌸 Hazal (genç): Erken göçtün ama izin silinmez. Mevlam sana gani gani rahmet eylesin.",
+        8: "🍃 Senem Savaş: Hayır hasenat ehli. Sadaka-i cariyen kabul olsun.",
+        9: "📜 Dilşah Toksun: Destanlara eş kadın. Ruhun şad, mekanın firdevs.",
+        10: "🌾 Ahmet Türeli: Hoşgörü ikliminin sultanı. Cennet bahçelerinde ol inşallah.",
+        11: "🕯️ Ferzo Türeli: Sofrası açık, duası makbul. Allah rahmetini bol eylesin.",
+        12: "📖 Şemseddin Yıldırım: Kârî hoca, güzel tilavetin unutulmadı. Makamın ali olsun.",
+        13: "🧵 Bediye Yıldırım: İğnesi, dikişi dua niyetine. Allah mekanını cennet eylesin.",
+        14: "🤲 MOLLA KUTBETTİN TÜRELİ: Babamız, hocamız, rehberimiz. 'İlim benim özüm' derdi. Başın göğe erdi, ey molla. Ruhuna bin Fatiha, İhlas-ı Şerif ve Yasin. Cennette en güzel köşkte otur inşallah. Oğlun Yılmaz ve torunların her daim sana dua eder.",
+        15: "💐 Hatun Ana: Sağ ol, anamız. Ömrüne bereket, ellerine sağlık. Allah uzun ömür versin, rızkını mübarek kılsın.",
+        16: "⭐ Yılmaz Türeli: Bu ağacın sahibi, atalarının duasını taşıyan kişi. Yolun açık, ömrün bereketli olsun. Rabbim aileni bağışlasın.",
+        17: "🌼 Rukiye: Gül yüzlü kızımız. Allah güzel ahlakını artırsın, hayırlı bir ömür nasip etsin.",
+        18: "📘 Sinan: Dedesinin izinde. İlim tahsil et, namazını kıl, atalarının duası seninle.",
+        19: "⚡ Sidar: Kalemin keskin, fikrin açık. Dürüst ve merhametli ol. Dualarımız sizinle.",
+        20: "🌸 Ümmü Gülsüm: Yavrumuz melek oldu. Mekânı cennet, makamı âli. Ailesine sabır versin Mevla. Onu dualarla anıyoruz.",
+        21: "🌱 Ahmet Bilal: Ahmet ve Bilal isimlerini taşıyorsun. Dürüst, imanlı, iyi bir insan ol. Allah yolunu açık etsin.",
+        22: "✨ Ali Asaf: Soyun en taze fidanı. Ömrün uzun, bahtın güzel olsun. Atalarının duası seninle."
+    };
+
+    // Kuşak gruplama
+    function kuşakAdi(sira) {
+        if (sira <= 9) return "🌳 7. & 6. Kuşak (Kadim Cedler) 🌳";
+        if (sira >=10 && sira <=13) return "🍁 5. Kuşak (Büyük Büyük Ebeveyn) 🍁";
+        if (sira ===14 || sira===15) return "🌿 4. Kuşak (Molla Kutbettin & Hatun Ana) 🌿";
+        if (sira ===16) return "⭐ 3. Kuşak (Yılmaz Türeli) ⭐";
+        if (sira >=17 && sira <=19) return "🌼 2. Kuşak (Çocuklar) 🌼";
+        return "🍃 1. Kuşak (Torunlar & Melek Ümmü Gülsüm) 🍃";
+    }
+
+    const container = document.getElementById("soyAgaci");
+    const gruplar = {};
+    bireyler.forEach(p => {
+        const g = kuşakAdi(p.sira);
+        if (!gruplar[g]) gruplar[g] = [];
+        gruplar[g].push(p);
+    });
+
+    for (let [grupAd, uyeler] of Object.entries(gruplar)) {
+        const genDiv = document.createElement("div");
+        genDiv.className = "generation";
+        const titleSpan = document.createElement("div");
+        titleSpan.className = "gen-title";
+        titleSpan.innerText = grupAd;
+        genDiv.appendChild(titleSpan);
+        const cardsDiv = document.createElement("div");
+        cardsDiv.className = "cards";
+        uyeler.forEach(p => {
+            const kart = document.createElement("div");
+            kart.className = "sacred-card";
+            kart.innerHTML = `
+                <div class="name">${p.ad} ${p.soyad}</div>
+                <div class="relation">${p.yakinlik}</div>
+                <div class="dates">📅 ${p.dogumYerTarih} ${p.durum.includes("Ölüm") ? "🕊️" : ""}</div>
+                <div class="place">📍 ${p.il} · ${p.kutuphane}</div>
+                <div class="place">📜 ${p.ekBilgi.substring(0, 70)}</div>
+                <button class="btn-dua">🙏 DUA & SÖZ</button>
+            `;
+            const btn = kart.querySelector(".btn-dua");
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const mesaj = duaSoz[p.sira] || "Ruhuna bir Fatiha. Mekanın cennet olsun.";
+                document.getElementById("modalIsim").innerHTML = `${p.ad} ${p.soyad} · ${p.yakinlik}`;
+                document.getElementById("modalDuaMetni").innerHTML = `<i>${mesaj}</i>`;
+                document.getElementById("duaModal").classList.add("open");
+                document.getElementById("overlay").classList.add("show");
+            });
+            cardsDiv.appendChild(kart);
+        });
+        genDiv.appendChild(cardsDiv);
+        container.appendChild(genDiv);
+    }
+
+    // Modal kapatma
+    const modalDuaElem = document.getElementById("duaModal");
+    const overlayElem = document.getElementById("overlay");
+    const kapatBtn = document.getElementById("modalKapat");
+    function kapatModal() {
+        modalDuaElem.classList.remove("open");
+        overlayElem.classList.remove("show");
+    }
+    kapatBtn.addEventListener("click", kapatModal);
+    overlayElem.addEventListener("click", kapatModal);
+
+    // AÇILIŞ DUALARI EKRANI KAPATMA
+    const girisEkrani = document.getElementById("duaEkrani");
+    const girisButon = document.getElementById("girisiKapat");
+    girisButon.addEventListener("click", () => {
+        girisEkrani.style.opacity = "0";
+        setTimeout(() => {
+            girisEkrani.style.display = "none";
+        }, 1000);
+    });
+</script>
+</body>
+</html>
